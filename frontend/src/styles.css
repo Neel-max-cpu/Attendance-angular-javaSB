@@ -4,3 +4,9 @@
 .signup-header .p-card-header  {
     @apply bg-blue-400 text-white;
 }
+.login-header .p-card-header  {
+    @apply bg-green-800 text-white;
+}
+.forgot-header .p-card-header  {
+    @apply bg-red-600 text-white;
+}

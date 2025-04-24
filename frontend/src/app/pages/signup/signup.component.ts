@@ -1,19 +1,65 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
-// component 
+// component
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { FormsModule } from '@angular/forms';
 import { IftaLabelModule } from 'primeng/iftalabel';
 
 @Component({
   selector: 'app-signup',
-  imports: [CardModule, ButtonModule,FormsModule, InputTextModule, IftaLabelModule],
-  standalone:true,
+  imports: [
+    CardModule,
+    ButtonModule,
+    FormsModule,
+    InputTextModule,
+    IftaLabelModule,
+    ReactiveFormsModule,
+  ],
+  standalone: true,
   templateUrl: './signup.component.html',
-  styleUrl: './signup.component.css'
+  styleUrl: './signup.component.css',
 })
 export class SignupComponent {
   value: string | undefined;
+
+  // it will be initiallized so !->put this
+  signUpForm!: FormGroup;
+
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
+    this.signUpForm = this.fb.group({
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+      cpassword: ['', Validators.required],
+    });
+  }
+
+  onSubmit() {
+    if(this.signUpForm.valid) {
+      this.authService.signUp(this.signUpForm.value).subscribe({
+        next: (res) => {
+          console.log('Signup Successful', res);
+          // redirect to /dashboard
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          console.log('Signup Failed', err);
+        },
+      });
+    }
+  }
 }

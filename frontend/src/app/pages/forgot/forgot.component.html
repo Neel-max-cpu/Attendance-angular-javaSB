@@ -1,10 +1,13 @@
-<div class="flex items-center justify-center bg-[#181515] h-screen w-full">
+<form [formGroup]="forgotForm" (ngSubmit)="onSubmit()">
+  <div class="flex items-center justify-center bg-[#181515] h-screen w-full">
     <p-card
-      class="signup-header shadow-xl shadow-gray-400 rounded-full"
+      class="forgot-header shadow-xl shadow-gray-400 rounded-full"
       [style]="{ width: '25rem', overflow: 'hidden' }"
     >
       <ng-template pTemplate="header">
-        <div class="flex flex-col space-y-2 items-center justify-center mt-3 p-3">
+        <div
+          class="flex flex-col space-y-2 items-center justify-center mt-3 p-3"
+        >
           <h1 class="font-mono text-3xl">Forgot Password</h1>
           <h1 class="font-mono">Change your Password here!🥱</h1>
         </div>
@@ -16,7 +19,7 @@
               class="w-full"
               pInputText
               id="Email"
-              [(ngModel)]="value"
+              formControlName="email"
               autocomplete="off"
             />
             <label for="Email">Email</label>
@@ -24,22 +27,35 @@
           <p-iftalabel>
             <input
               class="w-full"
+              type="password"
               pInputText
-              id="Password"
-              [(ngModel)]="value"
+              id="oldPassword"
+              formControlName="oldPassword"
               autocomplete="off"
             />
-            <label for="Password">Password</label>
+            <label for="oldPassword">Old Password</label>
+          </p-iftalabel>
+          <p-iftalabel>
+            <input
+              class="w-full"
+              type="password"
+              pInputText
+              id="newPassword"
+              formControlName="newPassword"
+              autocomplete="off"
+            />
+            <label for="newPassword">New Password</label>
           </p-iftalabel>
           <p-iftalabel>
             <input
               class="w-full"
               pInputText
-              id="Confirm Password"
-              [(ngModel)]="value"
+              type="password"
+              id="cPassword"
+              formControlName="cPassword"
               autocomplete="off"
             />
-            <label for="Confirm Password">Confirm Password</label>
+            <label for="cPassword">Confirm Password</label>
           </p-iftalabel>
         </div>
       </div>
@@ -47,6 +63,7 @@
         <div class="flex flex-col items-center gap-4 mt-1">
           <p-button
             label="Change Password"
+            type="submit"
             class="w-full"
             styleClass="w-full"
             variant="text"
@@ -54,11 +71,15 @@
             severity="help"
           />
           <div class="flex flex-col items-center">
-            <a class="font-mono text-blue-700 underline" href="/signup">Create account here!</a>
-            <a class="font-mono text-blue-700 underline" href="/login">Login instead</a>
+            <a class="font-mono text-blue-700 underline" href="/signup"
+              >Create account here!</a
+            >
+            <a class="font-mono text-blue-700 underline" href="/login"
+              >Login instead</a
+            >
           </div>
         </div>
       </ng-template>
     </p-card>
   </div>
-  
+</form>
