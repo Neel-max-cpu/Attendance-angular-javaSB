@@ -1,1 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+.signup-header .p-card-header  {
+    @apply bg-blue-400 text-white;
+}
