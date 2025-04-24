@@ -15,7 +15,7 @@ public class ForgotDto {
     private String newPassword;
 
     @NotEmpty(message = "cPassword can't be empty!")
-    private String cPasword;
+    private String cPassword;
 
     public String getEmail() {
         return email;
@@ -41,11 +41,11 @@ public class ForgotDto {
         this.newPassword = newPassword;
     }
 
-    public String getcPasword() {
-        return cPasword;
+    public String getcPassword() {
+        return cPassword;
     }
 
-    public void setcPasword(String cPasword) {
-        this.cPasword = cPasword;
+    public void setcPassword(String cPassword) {
+        this.cPassword = cPassword;
     }
 }

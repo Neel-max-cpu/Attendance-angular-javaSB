@@ -4,6 +4,7 @@ import com.neel.backend.Entity.UserEntity;
 import com.neel.backend.Repository.UsersRepository;
 import com.neel.backend.dto.ForgotDto;
 import com.neel.backend.dto.LoginDto;
+import com.neel.backend.dto.SignupDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +30,8 @@ public class UserController {
 
     @PostMapping("/signup")
     // @RequestBody - take from body, of what type? - type of UserEntity, and at last a variable(myEntry)
-    public ResponseEntity<String> createEntry(@RequestBody UserEntity myEntry){
-        // in memory --
+    public ResponseEntity<String> createEntry(@RequestBody SignupDto signupDto){
+        // in memory --  UserEntity myEntry - now using dto
         /*
         if(!myEntry.getPassword().equals(myEntry.getCpassword())){
             return ResponseEntity.badRequest().body("password and confirm password don't match!");
@@ -39,20 +40,25 @@ public class UserController {
         return ResponseEntity.ok("User created Successfully!");
          */
 
-        // pass and cpass
-        if(!myEntry.getPassword().equals(myEntry.getCpassword())){
-            return ResponseEntity.badRequest().body("password and confirm password don't match!");
+        if(!signupDto.getPassword().equals(signupDto.getcpassword())){
+            return ResponseEntity.badRequest().body("Password and confirm password don't match!");
         }
 
-        // user already exist
-        if(usersRepository.findByEmail(myEntry.getEmail()) != null){
+        // Check if the user already exists based on email
+        if(usersRepository.findByEmail(signupDto.getEmail()) != null){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Email with that user already exists!");
         }
 
+        // Create a UserEntity from SignupDto
+        UserEntity myEntry = new UserEntity();
+        myEntry.setName(signupDto.getName());
+        myEntry.setEmail(signupDto.getEmail());
+        myEntry.setPassword(signupDto.getPassword());
+
+        // Save the new user
         usersRepository.save(myEntry);
+
         return ResponseEntity.ok("User created Successfully!");
-
-
     }
 
     @PostMapping("/login")
@@ -83,12 +89,12 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("incorrect email or password!");
     }
 
-    @PostMapping("/forgot")
+    @PutMapping("/forgot")
     public ResponseEntity<String> checkPass(@RequestBody ForgotDto myForgot){
         String email = myForgot.getEmail();
         String oldPassword = myForgot.getOldPassword();
         String newPassword = myForgot.getNewPassword();
-        String cPassword = myForgot.getcPasword();
+        String cPassword = myForgot.getcPassword();
 
         UserEntity user = usersRepository.findByEmail(email);
         if(user==null){

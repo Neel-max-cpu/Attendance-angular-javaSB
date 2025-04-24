@@ -1,26 +1,14 @@
-package com.neel.backend.Entity;
+package com.neel.backend.dto;
 
-
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 
-
-import javax.annotation.processing.Generated;
-
-@Entity
-@Table(name="users")
-public class UserEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+public class SignupDto {
     @NotEmpty(message = "Name cannot be empty")
     private String name;
 
     @NotEmpty(message = "Email cannot be empty")
     @Email(message = "Email should be valid")
-    @Column(unique = true)
     private String email;
 
     @NotEmpty(message = "Password cannot be empty")
@@ -28,14 +16,8 @@ public class UserEntity {
 
 
 
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
+    @NotEmpty(message = "Confirm password cannot be empty")
+    private String cpassword;
 
     public String getName() {
         return name;
@@ -59,5 +41,13 @@ public class UserEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getcpassword() {
+        return cpassword;
+    }
+
+    public void setcpassword(String cpassword) {
+        this.cpassword = cpassword;
     }
 }

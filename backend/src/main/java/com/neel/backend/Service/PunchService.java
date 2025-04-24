@@ -34,6 +34,6 @@ public class PunchService {
     }
 
     public List<PunchRecordEntity> getPunchHistory(Long userId){
-        return punchRepo.findByUserIdOrderByDatesDesc(userId);
+        return punchRepo.findByUserIdOrderByDateDesc(userId);
     }
 }
