@@ -2,17 +2,14 @@ package com.neel.backend.Controller;
 
 import com.neel.backend.Entity.UserEntity;
 import com.neel.backend.Repository.UsersRepository;
+import com.neel.backend.dto.ForgotDto;
 import com.neel.backend.dto.LoginDto;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -84,5 +81,31 @@ public class UserController {
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("incorrect email or password!");
+    }
+
+    @PostMapping("/forgot")
+    public ResponseEntity<String> checkPass(@RequestBody ForgotDto myForgot){
+        String email = myForgot.getEmail();
+        String oldPassword = myForgot.getOldPassword();
+        String newPassword = myForgot.getNewPassword();
+        String cPassword = myForgot.getcPasword();
+
+        UserEntity user = usersRepository.findByEmail(email);
+        if(user==null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("incorrect email!");
+        }
+
+        if(!user.getPassword().equals(oldPassword)){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("enter the correct old password!");
+        }
+
+        if(!newPassword.equals(cPassword)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("New password and Confirm password must be same!");
+        }
+
+        user.setPassword(newPassword);
+        usersRepository.save(user);
+
+        return ResponseEntity.ok("Password updated successfully!");
     }
 }
