@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Route, Router } from '@angular/router';
+import { Route, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 // component 
@@ -14,7 +14,16 @@ import { LucideAngularModule, Laugh  } from 'lucide-angular';
 
 @Component({
   selector: 'app-login',
-  imports: [CardModule, ButtonModule,FormsModule, InputTextModule, IftaLabelModule, LucideAngularModule, IftaLabelModule, ReactiveFormsModule],
+  imports: [CardModule, 
+    ButtonModule,
+    FormsModule, 
+    InputTextModule, 
+    IftaLabelModule, 
+    LucideAngularModule, 
+    IftaLabelModule, 
+    ReactiveFormsModule,
+    RouterModule
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

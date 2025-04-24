@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
@@ -24,6 +24,7 @@ import { IftaLabelModule } from 'primeng/iftalabel';
     InputTextModule,
     IftaLabelModule,
     ReactiveFormsModule,
+    RouterModule,
   ],
   standalone: true,
   templateUrl: './signup.component.html',

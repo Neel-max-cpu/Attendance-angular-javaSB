@@ -1,1 +1,23 @@
-<p>dashboard works!</p>
+<div class="h-screen w-full bg-[#181515]">
+    <div class="flex justify-end p-4">
+        <!-- signout -->
+        <button class="bg-blue-600 hover:bg-blue-700 hover:cursor-pointer rounded w-1/10 h-10 flex justify-between p-2 text-white items-center">
+            SignOut
+            <lucide-angular [img]="LogOut" class="my-icon"></lucide-angular>
+        </button>
+    </div>
+
+    <!-- punch in/out -->
+    <div class="flex justify-center items-center space-x-4 p-15">
+        <button class="w-1/5 text-white flex items-center justify-between rounded p-2 bg-green-600 hover:cursor-pointer hover:bg-green-700">
+            Punch In
+            <lucide-angular [img]="TicketCheck" class="my-icon"></lucide-angular>
+        </button>
+        <button class="w-1/5 text-white flex items-center justify-between rounded p-2 bg-red-600 hover:cursor-pointer hover:bg-red-700">
+            Punch Out
+            <lucide-angular [img]="TicketMinus" class="my-icon"></lucide-angular>
+        </button>
+    </div>
+
+    <!-- to do punch in time and dates -->
+</div>

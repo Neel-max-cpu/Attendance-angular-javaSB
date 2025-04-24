@@ -10,7 +10,7 @@ import { IftaLabelModule } from 'primeng/iftalabel';
 // icons 
 import { LucideAngularModule, Laugh  } from 'lucide-angular';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 
 @Component({
@@ -23,7 +23,8 @@ import { Router } from '@angular/router';
     IftaLabelModule, 
     LucideAngularModule,
     IftaLabelModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule
   ],
   templateUrl: './forgot.component.html',
   styleUrl: './forgot.component.css'
