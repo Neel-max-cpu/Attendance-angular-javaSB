@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 
+import { NgIf, NgFor, DatePipe } from '@angular/common';
+
 // icons -
 import { LucideAngularModule, TicketCheck, TicketMinus,LogOut   } from 'lucide-angular';
 import { PunchService } from '../../services/punch.service';
@@ -9,7 +11,7 @@ import { min } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, NgIf, NgFor, DatePipe],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -54,7 +56,7 @@ export class DashboardComponent implements OnInit {
   }
 
   // stop the timer
-  puchOut(){
+  punchOut(){
     this.punchService.punchOut().subscribe((response)=>{
       this.isPunchedIn = false;
       this.punchOutTime = new Date();
@@ -86,7 +88,8 @@ export class DashboardComponent implements OnInit {
       this.previousDays = history.map((entry)=>({
         date: new Date(entry.punchInTime),
         totalTime: entry.totalTime
-      }));
+      }))
+      .filter(day => !isNaN(day.date.getTime()));
     })
   }
 

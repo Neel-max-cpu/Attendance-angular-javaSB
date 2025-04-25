@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class PunchService {
-  private baseUrl = 'http://localhost:8080/api/puch'
+  private baseUrl = 'http://localhost:8080/api/punch'
   constructor(private http: HttpClient) { }
 
   private getAthHeaders():HttpHeaders{

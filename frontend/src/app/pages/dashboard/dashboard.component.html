@@ -9,15 +9,89 @@
 
     <!-- punch in/out -->
     <div class="flex justify-center items-center space-x-4 p-15">
-        <button class="w-1/5 text-white flex items-center justify-between rounded p-2 bg-green-600 hover:cursor-pointer hover:bg-green-700">
+        <button (click)="punchIn()" [disabled]="isPunchedIn" class="w-1/5 text-white flex items-center justify-between rounded p-2 bg-green-600 hover:cursor-pointer hover:bg-green-700">
             Punch In
             <lucide-angular [img]="TicketCheck" class="my-icon"></lucide-angular>
         </button>
-        <button class="w-1/5 text-white flex items-center justify-between rounded p-2 bg-red-600 hover:cursor-pointer hover:bg-red-700">
+        <button (click)="punchOut()" [disabled]="!isPunchedIn" class="w-1/5 text-white flex items-center justify-between rounded p-2 bg-red-600 hover:cursor-pointer hover:bg-red-700">
             Punch Out
             <lucide-angular [img]="TicketMinus" class="my-icon"></lucide-angular>
         </button>
     </div>
 
     <!-- to do punch in time and dates -->
+    
+    <!--today's date  -->
+    <div class="text-center space-y-2 text-white">
+        <p *ngIf="todayPunchIn">Punched In: {{todayPunchIn | date:'shortTime'}} </p>
+        <p *ngIf="toadyPunchOut">Punched Out: {{todayPunchIn | date:'shortTime'}} </p>
+        <p *ngIf="todayTotalTime">Total Today: {{getFormattedTime(todayTotalTime)}} </p>
+    </div>
+    
+    <!-- previous dates -->
+    <div class="mt-6 p-10">
+        <h2 class="text-lg text-white font-semibold mb-2">✅Previous Punches: </h2>
+        <ul class="text-white">
+            <li *ngFor="let day of previousDays" class="bg-gray-800 rounded p-2 flex justify-between text-white">                
+                <span> {{day.date | date:'short'}} </span>
+                <span> {{getFormattedTime(day.totalTime)}} </span>
+            </li>
+        </ul>
+
+    </div>
 </div>
+
+
+
+
+<!-- <div class="h-screen w-full bg-[#181515] text-white p-4 space-y-6">
+
+    
+    <div class="flex justify-end">
+      <button (click)="logout()" class="bg-blue-600 hover:bg-blue-700 cursor-pointer rounded w-auto h-10 flex items-center px-4">
+        SignOut
+        <lucide-angular [img]="LogOut" class="ml-2 w-5 h-5"></lucide-angular>
+      </button>
+    </div>
+  
+    
+    <div class="flex justify-center items-center space-x-4">
+      <button
+        (click)="punchIn()"
+        [disabled]="isPunchedIn"
+        class="w-1/5 flex items-center justify-between p-2 rounded bg-green-600 hover:bg-green-700 disabled:opacity-50"
+      >
+        Punch In
+        <lucide-angular [img]="TicketCheck" class="w-5 h-5"></lucide-angular>
+      </button>
+  
+      <button
+        (click)="puchOut()"
+        [disabled]="!isPunchedIn"
+        class="w-1/5 flex items-center justify-between p-2 rounded bg-red-600 hover:bg-red-700 disabled:opacity-50"
+      >
+        Punch Out
+        <lucide-angular [img]="TicketMinus" class="w-5 h-5"></lucide-angular>
+      </button>
+    </div>
+  
+    
+    <div class="text-center space-y-2">
+      <p *ngIf="todayPunchIn">🕒 Punched In: {{ todayPunchIn | date:'shortTime' }}</p>
+      <p *ngIf="toadyPunchOut">⏱️ Punched Out: {{ toadyPunchOut | date:'shortTime' }}</p>
+      <p *ngIf="todayTotalTime > 0">⏳ Total Today: {{ getFormattedTime(todayTotalTime) }}</p>
+    </div>
+  
+    
+    <div *ngIf="previousDays.length > 0" class="mt-6">
+      <h2 class="text-lg font-semibold mb-2">Previous Punches</h2>
+      <ul class="space-y-1">
+        <li *ngFor="let day of previousDays" class="bg-gray-800 rounded p-2 flex justify-between">
+          <span>{{ day.date | date:'mediumDate' }}</span>
+          <span>{{ getFormattedTime(day.totalTime) }}</span>
+        </li>
+      </ul>
+    </div>
+  
+  </div>
+   -->
