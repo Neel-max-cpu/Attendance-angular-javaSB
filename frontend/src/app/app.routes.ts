@@ -4,12 +4,17 @@ import { SignupComponent } from './pages/signup/signup.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ForgotComponent } from './pages/forgot/forgot.component';
+import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
     {path: "", redirectTo: "login", pathMatch:"full"},
     {path: "login", component:LoginComponent},
     {path: "signup", component:SignupComponent},
     {path: "profile", component:ProfileComponent},
-    {path: "dashboard", component:DashboardComponent},
+    {
+        path: "dashboard", 
+        component:DashboardComponent,
+        canActivate: [authGuard],       // protected
+    },
     {path: "forgot", component:ForgotComponent}
 ];

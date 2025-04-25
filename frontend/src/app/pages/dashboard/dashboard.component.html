@@ -1,7 +1,7 @@
 <div class="h-screen w-full bg-[#181515]">
     <div class="flex justify-end p-4">
         <!-- signout -->
-        <button class="bg-blue-600 hover:bg-blue-700 hover:cursor-pointer rounded w-1/10 h-10 flex justify-between p-2 text-white items-center">
+        <button (click)="logout()" class="bg-blue-600 hover:bg-blue-700 hover:cursor-pointer rounded w-1/10 h-10 flex justify-between p-2 text-white items-center">
             SignOut
             <lucide-angular [img]="LogOut" class="my-icon"></lucide-angular>
         </button>

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 
 // icons -
@@ -13,5 +14,12 @@ import { LucideAngularModule, TicketCheck, TicketMinus,LogOut   } from 'lucide-a
 export class DashboardComponent {
   readonly TicketCheck = TicketCheck;
   readonly TicketMinus  = TicketMinus ;
-  readonly LogOut   = LogOut  ;
+  readonly LogOut   = LogOut ;
+
+  constructor(private router: Router){}
+
+  logout(){
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
+  }
 }
