@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -66,7 +68,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> checkEntry(@RequestBody LoginDto myLogin){
+    public ResponseEntity<?> checkEntry(@RequestBody LoginDto myLogin){
         String email = myLogin.getEmail();
         String password = myLogin.getPassword();
 
@@ -89,7 +91,10 @@ public class UserController {
         if(user!=null && user.getPassword().equals(password)){
             // generate token ---
             String token = jwtService.generateToken(email);
-            return ResponseEntity.ok("Logged in successfully and token: !" + token);
+            // Create a response object to return the token
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);
+            return ResponseEntity.ok(response);  // Return the token as part of a JSON response
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("incorrect email or password!");
