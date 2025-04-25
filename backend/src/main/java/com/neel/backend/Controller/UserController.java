@@ -2,6 +2,7 @@ package com.neel.backend.Controller;
 
 import com.neel.backend.Entity.UserEntity;
 import com.neel.backend.Repository.UsersRepository;
+import com.neel.backend.Service.JwtService;
 import com.neel.backend.dto.ForgotDto;
 import com.neel.backend.dto.LoginDto;
 import com.neel.backend.dto.SignupDto;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 public class UserController {
 
     // using in memory
@@ -21,6 +22,9 @@ public class UserController {
 
     @Autowired
     private UsersRepository usersRepository;
+
+    @Autowired
+    private JwtService jwtService;
 
     @GetMapping("/users")
     public List<UserEntity> getAll(){
@@ -83,7 +87,9 @@ public class UserController {
 
         UserEntity user = usersRepository.findByEmail(email);
         if(user!=null && user.getPassword().equals(password)){
-            return ResponseEntity.ok("Logged in successfully!");
+            // generate token ---
+            String token = jwtService.generateToken(email);
+            return ResponseEntity.ok("Logged in successfully and token: !" + token);
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("incorrect email or password!");
