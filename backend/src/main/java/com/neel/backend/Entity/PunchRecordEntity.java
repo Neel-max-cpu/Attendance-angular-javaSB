@@ -3,6 +3,7 @@ package com.neel.backend.Entity;
 
 import jakarta.persistence.*;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -17,6 +18,19 @@ public class PunchRecordEntity {
     private LocalDate date;
     private LocalDateTime punchIn;
     private LocalDateTime punchOut;
+
+    private Long totalTime;
+
+    public Long getTotalTime() {
+        if (punchIn != null && punchOut != null) {
+            totalTime = Duration.between(punchIn, punchOut).toMinutes();
+        }
+        return totalTime;
+    }
+
+    public void setTotalTime(Long totalTime) {
+        this.totalTime = totalTime;
+    }
 
     public PunchRecordEntity(){}
 

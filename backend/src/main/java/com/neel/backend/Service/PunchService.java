@@ -5,6 +5,7 @@ import com.neel.backend.Repository.PunchRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,13 +13,15 @@ import java.util.Optional;
 
 @Service
 public class PunchService {
+
     @Autowired
     private PunchRecordRepository punchRepo;
 
-    public PunchRecordEntity punchIn(Long userId){
-        // prevents mulitple punchins without punching out
+    // Handle punch-in
+    public PunchRecordEntity punchIn(Long userId) {
+        // Prevents multiple punch-ins without punching out
         Optional<PunchRecordEntity> active = punchRepo.findTopByUserIdAndPunchOutIsNullOrderByPunchInDesc(userId);
-        if(active.isPresent()){
+        if (active.isPresent()) {
             throw new RuntimeException("Already punched in. Punch out first!");
         }
 
@@ -26,14 +29,23 @@ public class PunchService {
         return punchRepo.save(record);
     }
 
-    public PunchRecordEntity punchOut(Long userId){
+    // Handle punch-out
+    public PunchRecordEntity punchOut(Long userId) {
         PunchRecordEntity record = punchRepo.findTopByUserIdAndPunchOutIsNullOrderByPunchInDesc(userId)
-                .orElseThrow(()->new RuntimeException("No Active punch-in found!"));
+                .orElseThrow(() -> new RuntimeException("No Active punch-in found!"));
         record.setPunchOut(LocalDateTime.now());
         return punchRepo.save(record);
     }
 
-    public List<PunchRecordEntity> getPunchHistory(Long userId){
-        return punchRepo.findByUserIdOrderByDateDesc(userId);
+    // Get punch history with calculated total time
+    public List<PunchRecordEntity> getPunchHistory(Long userId) {
+        List<PunchRecordEntity> records = punchRepo.findByUserIdOrderByDateDesc(userId);
+        for (PunchRecordEntity record : records) {
+            if (record.getPunchIn() != null && record.getPunchOut() != null) {
+                long totalMinutes = Duration.between(record.getPunchIn(), record.getPunchOut()).toMinutes();
+                record.setTotalTime(totalMinutes);  // Setting calculated total time
+            }
+        }
+        return records;
     }
 }

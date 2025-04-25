@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PunchRecordRepository extends JpaRepository<PunchRecordEntity, Long> {
+
+    Optional<PunchRecordEntity> findTopByUserIdAndPunchOutIsNullOrderByPunchInDesc(Long userId);
+
     List<PunchRecordEntity> findByUserIdOrderByDateDesc(Long userId);
-    Optional<PunchRecordEntity>findTopByUserIdAndPunchOutIsNullOrderByPunchInDesc(Long userId);
 }

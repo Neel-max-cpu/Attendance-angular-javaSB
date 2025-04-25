@@ -1,9 +1,6 @@
 package com.neel.backend.Service;
 
-import io.jsonwebtoken.Jwt;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
@@ -23,17 +20,16 @@ public class JwtService {
     }
     */
 
-    public SecretKey getKey() {
-        // Generates a secure key for HS256 (HMAC-SHA256)
-        return Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static final String SECRET = "my-super-secret-key-which-is-at-least-32-bytes-long";
+    private SecretKey getKey() {
+        return Keys.hmacShaKeyFor(SECRET.getBytes());
     }
-
-    private final long EXPIRATION = 1000 * 60 * 60 * 24;    //24 hrs in ms
-
 
     //generate token
     public String generateToken(String email){
         SecretKey key = getKey();
+        //24 hrs in ms
+        long EXPIRATION = 1000 * 60 * 60 * 24;
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())
