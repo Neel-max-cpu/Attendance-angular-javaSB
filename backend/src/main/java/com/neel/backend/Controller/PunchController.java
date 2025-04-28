@@ -7,11 +7,9 @@ import com.neel.backend.Service.PunchService;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -44,5 +42,12 @@ public class PunchController {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity user = usersRepository.findByEmail(email);
         return punchService.getPunchHistory(user.getId());
+    }
+
+    @GetMapping("/history/{date}")
+    public List<PunchRecordEntity>getHistoryByDate(@PathVariable LocalDate date){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity user = usersRepository.findByEmail(email);
+        return punchService.getPunchHistoryByDate(user.getId(), date);
     }
 }

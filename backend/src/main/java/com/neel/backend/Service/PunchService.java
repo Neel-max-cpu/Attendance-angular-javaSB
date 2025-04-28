@@ -48,4 +48,9 @@ public class PunchService {
         }
         return records;
     }
+
+    //get History by date
+    public List<PunchRecordEntity> getPunchHistoryByDate(Long userId, LocalDate date){
+        return punchRepo.findByUserIdAndDateOrderByIdDesc(userId, date);
+    }
 }

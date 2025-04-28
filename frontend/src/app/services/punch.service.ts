@@ -30,8 +30,16 @@ export class PunchService {
   
   
   // history
+  /*
   getHistory():Observable<any[]>{
     const headers = this.getAthHeaders();
     return this.http.get<any[]>(`${this.baseUrl}/history`, {headers});
+  }
+  */
+
+  // history via date
+  historyViaDate(date: string): Observable<any>{
+    const headers = this.getAthHeaders();
+    return this.http.get<any[]>(`${this.baseUrl}/history/${date}`, {headers});
   }
 }

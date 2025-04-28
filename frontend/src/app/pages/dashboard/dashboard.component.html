@@ -1,4 +1,4 @@
-<div class="h-screen w-full bg-[#181515]">
+<div class="h-screen w-full bg-[#181515] font-mono">
     <div class="flex justify-end p-4">
         <!-- signout -->
         <button (click)="logout()" class="bg-blue-600 hover:bg-blue-700 hover:cursor-pointer rounded w-1/10 h-10 flex justify-between p-2 text-white items-center">
@@ -18,25 +18,39 @@
             <lucide-angular [img]="TicketMinus" class="my-icon"></lucide-angular>
         </button>
     </div>
-
-    <!-- to do punch in time and dates -->
     
-    <!--today's date  -->
-    <div class="text-center space-y-2 text-white">
-        <p *ngIf="todayPunchIn">Punched In: {{todayPunchIn | date:'shortTime'}} </p>
-        <p *ngIf="toadyPunchOut">Punched Out: {{todayPunchIn | date:'shortTime'}} </p>
-        <p *ngIf="todayTotalTime">Total Today: {{getFormattedTime(todayTotalTime)}} </p>
+    <!-- date button  -->
+    <div class="flex items-center justify-center p-2 space-x-4">
+        <button (click)="loadToday()" class="text-white bg-blue-600 p-2 rounded-lg hover:bg-blue-700 hover:cursor-pointer">Today</button>
+        <p-datepicker [showIcon]="true" (onSelect)="onDateChange($event)" class="temp-class" placeholder="Select date" dateFormat="yy-dd-mm" formControlName="date" />
     </div>
     
-    <!-- previous dates -->
-    <div class="mt-6 p-10">
-        <h2 class="text-lg text-white font-semibold mb-2">✅Previous Punches: </h2>
-        <ul class="text-white">
-            <li *ngFor="let day of previousDays" class="bg-gray-800 rounded p-2 flex justify-between text-white">                
-                <span> {{day.date | date:'short'}} </span>
-                <span> {{getFormattedTime(day.totalTime)}} </span>
-            </li>
-        </ul>
+    <!-- punched -->
+    <div class="p-20 flex flex-col space-y-4 text-white">
 
+        <div class="flex space-x-2">
+            <h1 class="text-3xl font-bold">⌛Total Hours:</h1>
+            <!-- take this as variable -->
+            <span class="text-3xl">8hr 30m</span>
+        </div>
+
+        <div class="flex flex-col">
+            <h1 class="text-2xl">Punches:</h1>
+            <!--  -->
+            <div class="p-3">
+                <!-- map from here all the punches -->
+                <div class="flex space-x-3">
+                    <h1>Punch in:</h1>
+                    <h1>time1</h1>
+                </div>
+                <div class="flex space-x-3">
+                    <h1>Punch Out:</h1>
+                    <h1>time2</h1>
+                </div>
+            </div>
+        </div>
+    
+    
     </div>
+   
 </div>

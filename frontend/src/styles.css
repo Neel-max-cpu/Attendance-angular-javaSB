@@ -10,3 +10,33 @@
 .forgot-header .p-card-header  {
     @apply bg-red-600 text-white;
 }
+
+.temp-class .p-datepicker-input{
+    @apply bg-black border-none placeholder:text-gray-400  text-gray-300
+}
+
+.temp-class .p-datepicker-panel{
+    @apply border-none text-gray-400
+}
+
+.temp-class {
+    .p-datepicker-panel,
+    .p-datepicker-header{
+        @apply bg-black text-white
+    }
+
+}
+
+.temp-class{
+    .p-datepicker-select-month,
+    .p-datepicker-select-year{
+        @apply text-white
+    }
+}
+
+.temp-class {
+    .p-datepicker-day,
+    .p-datepicker-weekday{
+        @apply text-white
+    }
+}
