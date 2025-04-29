@@ -25,12 +25,14 @@ export class DashboardComponent implements OnInit {
 
 
   isPunchedIn = false;
+  todaydate = true;
   punchInTime : Date | null = null;
   punchOutTime : Date | null = null;
   todayTotalTime = 0;
 
-  // todayPunchIn: Date | null = null;
-  // toadyPunchOut: Date | null = null;
+  // for live timer
+  timerInterval: any;
+  elapsedTime: string = '';
   
   punches: { punchIn: string, punchOut: string }[] = [];
   selectedDate: Date = new Date();
@@ -47,6 +49,7 @@ export class DashboardComponent implements OnInit {
     if(activePunch){
       this.isPunchedIn = true;
       this.punchInTime = new Date(activePunch);
+      this.startTimer();
     }
   }
 
@@ -63,6 +66,7 @@ export class DashboardComponent implements OnInit {
       this.isPunchedIn = true;
       this.punchInTime = new Date();   
       localStorage.setItem('punchInTime', this.punchInTime.toISOString());
+      this.startTimer();
 
       // push at the last - unshit at the front
       this.punches.unshift({
@@ -74,19 +78,31 @@ export class DashboardComponent implements OnInit {
 
   // stop the timer
   punchOut(){
-    this.punchService.punchOut().subscribe((response)=>{
-      this.isPunchedIn = false;
-      this.punchOutTime = new Date();      
-      localStorage.removeItem('punchInTime');
-
-      const lastPunch = this.punches[0];
-      if(lastPunch) lastPunch.punchOut = this.punchOutTime.toISOString();
-
-      if(this.punchInTime && this.punchOutTime){
-        const timeDiff = Math.abs(this.punchOutTime.getTime() - this.punchInTime.getTime());
-        // console.log(timeDiff);
-        const minutes = Math.floor(timeDiff / (1000 * 60));
-        this.todayTotalTime += minutes;
+    this.punchService.punchOut().subscribe({
+      next: (response)=>{      
+        this.stopTimer();
+        this.isPunchedIn = false;
+        this.punchOutTime = new Date();     
+        localStorage.removeItem('punchInTime');
+        
+        const lastPunch = this.punches[0];
+        if(lastPunch) lastPunch.punchOut = this.punchOutTime.toISOString();
+        
+        if(this.punchInTime && this.punchOutTime){
+          const timeDiff = Math.abs(this.punchOutTime.getTime() - this.punchInTime.getTime());
+          // console.log(timeDiff);
+          const minutes = Math.floor(timeDiff / (1000 * 60));
+          this.todayTotalTime += minutes;
+        }
+      },
+      error: (err)=>{
+        if(err.error && err.error.message === "Punch out rejected: more than 12 hours have passed!"){
+          alert("Punch-out rejected: more than 12 hours has passed!");
+        }
+        else{
+          console.log("Failed to punch out!", err);
+          alert("An error had occured while punching out!");
+        }
       }
     });
   }
@@ -129,14 +145,25 @@ export class DashboardComponent implements OnInit {
 
   loadToday() {
     this.selectedDate = new Date();
+    this.todaydate = true;
     this.loadHistoryForDate(this.selectedDate);
   }
 
   onDateChange(event: any) {
     if (event) {
       this.selectedDate = event;
+      this.todaydate = this.isToday(event); 
       this.loadHistoryForDate(this.selectedDate);
     }
+  }
+
+  isToday(date: Date): boolean {
+    const today = new Date();
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
   }
 
   // Format Date to yyyy-MM-dd (backend expects it)
@@ -157,6 +184,34 @@ export class DashboardComponent implements OnInit {
     const hours = Math.floor(this.todayTotalTime / 60);
     const mins = this.todayTotalTime % 60;
     return `${hours}h ${mins}m`;
+  }
+
+  startTimer(){
+    this.updateElapsedTime();
+    this.timerInterval = setInterval(()=>{
+      this.updateElapsedTime();
+    }, 1000);
+  }
+
+  stopTimer(){
+    clearInterval(this.timerInterval);
+    this.timerInterval = null;
+    this.elapsedTime = '';
+  }
+
+  updateElapsedTime(){
+    if(this.punchInTime){
+      const now = new Date();
+      const diffMs = now.getTime() - this.punchInTime.getTime();
+      const hours = Math.floor(diffMs / 3600000);
+      const minutes = Math.floor((diffMs % 3600000) / 60000);
+      const seconds = Math.floor((diffMs % 60000) / 1000);
+      this.elapsedTime = `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`;
+    }
+  }
+
+  pad(n: number): string {
+    return n < 10 ? '0' + n : n.toString();
   }
 
   logout(){

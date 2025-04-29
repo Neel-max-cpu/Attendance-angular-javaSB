@@ -49,6 +49,7 @@ export class LoginComponent {
       this.authService.login(this.loginForm.value).subscribe({
         next: (res)=>{
           console.log("loggedin Successfully", res);
+          alert("loggedin successfull!");
           this.router.navigate(['/dashboard']);
         },
         error: (err)=>{

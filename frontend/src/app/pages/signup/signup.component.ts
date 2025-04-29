@@ -54,6 +54,7 @@ export class SignupComponent {
       this.authService.signUp(this.signUpForm.value).subscribe({
         next: (res) => {
           console.log('Signup Successful', res);
+          alert("Signup Successful!");
           // redirect to /login
           this.router.navigate(['/login']);
         },

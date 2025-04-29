@@ -53,6 +53,7 @@ export class ForgotComponent {
       this.authService.forgot(this.forgotForm.value).subscribe({
         next :(res)=>{
           console.log("Password Changed successfully", res);
+          alert("Password changed successful!")
           this.router.navigate(['/login']);
         },
         error: (err)=>{

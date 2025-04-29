@@ -33,7 +33,16 @@ public class PunchService {
     public PunchRecordEntity punchOut(Long userId) {
         PunchRecordEntity record = punchRepo.findTopByUserIdAndPunchOutIsNullOrderByPunchInDesc(userId)
                 .orElseThrow(() -> new RuntimeException("No Active punch-in found!"));
-        record.setPunchOut(LocalDateTime.now());
+
+        LocalDateTime punchIn = record.getPunchIn();
+        LocalDateTime punchOut = LocalDateTime.now();
+        Duration duration = Duration.between(punchIn, punchOut);
+        if(duration.toHours() > 12){
+            record.setPunchOut(null);
+            throw new RuntimeException("Punch out rejected: more than 12 hours have passed!");
+        }
+
+        record.setPunchOut(punchOut);
         return punchRepo.save(record);
     }
 
