@@ -1,8 +1,8 @@
 # Frontend
-Based on : 
-Frontend - Angular, Tailwind, Prime Ng Component
-Backend -  Java Spring Boot
-Database - MySql
+### Based on : 
+- **Frontend** - Angular, Tailwind, Prime Ng Component
+- **Backend** -  Java Spring Boot
+- **Database** - MySql
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.7.
 
@@ -14,7 +14,7 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 ![Forgot Password page](./public/3.png)
 ![Dashboard page 1](./public/4.png)
 ![Dashboard page 2](./public/5.png)
-![Dashboard page 3](./public/6.png)
+![Dashboard page 3- ](./public/6.png)
 
 ## Dependencies
 ```bash
