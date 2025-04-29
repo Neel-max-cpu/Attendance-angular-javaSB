@@ -9,11 +9,12 @@
 
     <!-- punch in/out -->
     <div class="flex justify-center items-center space-x-4 p-15">
-        <button (click)="punchIn()" [disabled]="isPunchedIn" class="w-1/5 text-white flex items-center justify-between rounded p-2 bg-green-600 hover:cursor-pointer hover:bg-green-700">
+        <button (click)="punchIn()" [disabled]="isPunchedIn" 
+        class="w-1/5 text-white flex items-center justify-between rounded p-2 bg-green-600 hover:cursor-pointer hover:bg-green-700 disabled:opacity-50 disabled:hover:cursor-not-allowed">
             Punch In
             <lucide-angular [img]="TicketCheck" class="my-icon"></lucide-angular>
         </button>
-        <button (click)="punchOut()" [disabled]="!isPunchedIn" class="w-1/5 text-white flex items-center justify-between rounded p-2 bg-red-600 hover:cursor-pointer hover:bg-red-700">
+        <button (click)="punchOut()" [disabled]="!isPunchedIn" class="w-1/5 text-white flex items-center justify-between rounded p-2 bg-red-600 hover:cursor-pointer hover:bg-red-700 disabled:opacity-50 disabled:hover:cursor-not-allowed">
             Punch Out
             <lucide-angular [img]="TicketMinus" class="my-icon"></lucide-angular>
         </button>
@@ -22,7 +23,7 @@
     <!-- date button  -->
     <div class="flex items-center justify-center p-2 space-x-4">
         <button (click)="loadToday()" class="text-white bg-blue-600 p-2 rounded-lg hover:bg-blue-700 hover:cursor-pointer">Today</button>
-        <p-datepicker [showIcon]="true" (onSelect)="onDateChange($event)" class="temp-class" placeholder="Select date" dateFormat="yy-dd-mm" formControlName="date" />
+        <p-datepicker [showIcon]="true" (onSelect)="onDateChange($event)" class="temp-class" placeholder="Select date" dateFormat="yy-mm-dd" formControlName="date" />
     </div>
     
     <!-- punched -->
@@ -31,22 +32,43 @@
         <div class="flex space-x-2">
             <h1 class="text-3xl font-bold">⌛Total Hours:</h1>
             <!-- take this as variable -->
-            <span class="text-3xl">8hr 30m</span>
+            <!-- <span class="text-3xl">8hr 30m</span> -->
+            <span class="text-3xl">{{getFormattedTotalTime()}}</span>
         </div>
 
         <div class="flex flex-col">
             <h1 class="text-2xl">Punches:</h1>
             <!--  -->
-            <div class="p-3">
+            <div class="p-3 max-h-80 overflow-y-auto">
                 <!-- map from here all the punches -->
-                <div class="flex space-x-3">
+                <!-- <div class="flex space-x-3">
                     <h1>Punch in:</h1>
                     <h1>time1</h1>
                 </div>
                 <div class="flex space-x-3">
                     <h1>Punch Out:</h1>
                     <h1>time2</h1>
+                </div> -->
+                
+                <!-- map if available -->
+                <div *ngFor="let punch of punches" class="flex justify-between mx-20 space-x-3 mb-2" >
+                    <div class="flex space-x-1">
+                        <h1>Punch in:</h1>
+                        <span> {{punch.punchIn | date: 'shortTime'}} </span>
+                    </div>
+                    <div class="flex space-x-1">
+                        <h1>Punch out:</h1>
+                        <span>{{punch.punchOut | date: 'shortTime'}} </span>
+                    </div>
+
                 </div>
+
+                <!-- else no data -->
+                <div *ngIf="noData" class="text-center text-gray-400 text-xl mt-4">
+                    No Data To Show
+                </div>
+
+
             </div>
         </div>
     
