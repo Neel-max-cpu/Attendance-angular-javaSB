@@ -26,7 +26,7 @@ npm i
 To start a local development server - frontend, run:
 
 ```bash
-ng start
+npm start
 ```
 To start a local development server - backend:
 ```bash
