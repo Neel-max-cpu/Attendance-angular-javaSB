@@ -11,6 +11,14 @@
   </div>
 
   <!-- punch in/out -->
+  <div *ngIf="hasShown12HourWarning" class="flex items-center justify-center space-x-2">  
+    <lucide-angular [img]="OctagonAlert" class="my-icon text-yellow-500"></lucide-angular>
+    <h1 class="text-white">More than <span class="text-red-500">12hours</span> have passed! <span class="text-yellow-500">Punch Out!</span></h1>
+  </div>
+  <div *ngIf="hasShown14HourWarning" class="flex items-center justify-center space-x-2">  
+    <lucide-angular [img]="OctagonAlert" class="my-icon text-yellow-500"></lucide-angular>
+    <h1 class="text-white">More than <span class="text-red-500">14hours</span> have passed! <span class="text-yellow-500">Your time is invalid!</span></h1>
+  </div>
   <div *ngIf="todaydate" class="flex flex-col">
     <div class="flex justify-center items-center space-x-4 p-15">
       <button

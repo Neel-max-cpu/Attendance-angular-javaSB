@@ -7,7 +7,7 @@ import { NgIf, NgFor, DatePipe } from '@angular/common';
 
 
 // icons -
-import { LucideAngularModule, TicketCheck, TicketMinus,LogOut   } from 'lucide-angular';
+import { LucideAngularModule, TicketCheck, TicketMinus,LogOut,OctagonAlert    } from 'lucide-angular';
 
 // components -
 import { DatePicker  } from 'primeng/datepicker';
@@ -22,6 +22,7 @@ export class DashboardComponent implements OnInit {
   readonly TicketCheck = TicketCheck;
   readonly TicketMinus  = TicketMinus ;
   readonly LogOut = LogOut ;
+  readonly OctagonAlert  = OctagonAlert;
 
 
   isPunchedIn = false;
@@ -33,6 +34,8 @@ export class DashboardComponent implements OnInit {
   // for live timer
   timerInterval: any;
   elapsedTime: string = '';
+  hasShown12HourWarning = false;
+  hasShown14HourWarning = false;
   
   punches: { punchIn: string, punchOut: string }[] = [];
   selectedDate: Date = new Date();
@@ -96,10 +99,12 @@ export class DashboardComponent implements OnInit {
         }
       },
       error: (err)=>{
-        if(err.error && err.error.message === "Punch out rejected: more than 12 hours have passed!"){
-          alert("Punch-out rejected: more than 12 hours has passed!");
+        if(err.error && err.error.message === "Punch out rejected: more than 14 hours have passed!"){
+          this.stopTimer();
+          alert("Punch-out rejected: more than 14 hours has passed!");
         }
         else{
+          this.stopTimer();
           console.log("Failed to punch out!", err);
           alert("An error had occured while punching out!");
         }
@@ -187,6 +192,8 @@ export class DashboardComponent implements OnInit {
   }
 
   startTimer(){
+    this.hasShown12HourWarning = false;
+    this.hasShown14HourWarning = false;
     this.updateElapsedTime();
     this.timerInterval = setInterval(()=>{
       this.updateElapsedTime();
@@ -197,6 +204,8 @@ export class DashboardComponent implements OnInit {
     clearInterval(this.timerInterval);
     this.timerInterval = null;
     this.elapsedTime = '';
+    this.hasShown12HourWarning = false;
+    this.hasShown14HourWarning = false;
   }
 
   updateElapsedTime(){
@@ -207,6 +216,20 @@ export class DashboardComponent implements OnInit {
       const minutes = Math.floor((diffMs % 3600000) / 60000);
       const seconds = Math.floor((diffMs % 60000) / 1000);
       this.elapsedTime = `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`;
+
+      // check for 12 hours
+      if(hours>12 && hours<14 && !this.hasShown12HourWarning){
+        alert("Warning: You have punched in for more than 12 hours!")
+        this.hasShown12HourWarning = true;
+      }
+      
+      // check for 14 hours
+      if(hours>=14 && !this.hasShown14HourWarning){
+        alert("Warning: You have punched in for more than 14 hours! Your time is invalid!")
+        this.hasShown12HourWarning = false;
+        this.hasShown14HourWarning = true;
+      }
+
     }
   }
 

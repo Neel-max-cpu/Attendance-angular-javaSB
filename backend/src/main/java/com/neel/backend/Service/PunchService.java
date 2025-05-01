@@ -37,9 +37,9 @@ public class PunchService {
         LocalDateTime punchIn = record.getPunchIn();
         LocalDateTime punchOut = LocalDateTime.now();
         Duration duration = Duration.between(punchIn, punchOut);
-        if(duration.toHours() > 12){
+        if(duration.toHours() > 14){
             record.setPunchOut(null);
-            throw new RuntimeException("Punch out rejected: more than 12 hours have passed!");
+            throw new RuntimeException("Punch out rejected: more than 14 hours have passed!");
         }
 
         record.setPunchOut(punchOut);
