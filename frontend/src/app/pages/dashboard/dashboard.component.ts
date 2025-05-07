@@ -3,14 +3,21 @@ import { Router } from '@angular/router';
 import { PunchService } from '../../services/punch.service';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
 
-
+// for exporting --
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 
 // icons -
-import { LucideAngularModule, TicketCheck, TicketMinus,LogOut,OctagonAlert    } from 'lucide-angular';
+import { LucideAngularModule, TicketCheck, TicketMinus,LogOut,OctagonAlert,Download} from 'lucide-angular';
 
 // components -
 import { DatePicker  } from 'primeng/datepicker';
+
+
+// custom alert --
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,6 +30,7 @@ export class DashboardComponent implements OnInit {
   readonly TicketMinus  = TicketMinus ;
   readonly LogOut = LogOut ;
   readonly OctagonAlert  = OctagonAlert;
+  readonly Download = Download;
 
 
   isPunchedIn = false;
@@ -101,12 +109,23 @@ export class DashboardComponent implements OnInit {
       error: (err)=>{
         if(err.error && err.error.message === "Punch out rejected: more than 14 hours have passed!"){
           this.stopTimer();
-          alert("Punch-out rejected: more than 14 hours has passed!");
+          // alert("Punch-out rejected: more than 14 hours has passed!");
+          Swal.fire({
+            title: 'Error',
+            text: 'Punch-out rejected: more than 14 hours has passed!',            
+            icon:'error',
+          })
         }
         else{
           this.stopTimer();
           console.log("Failed to punch out!", err);
-          alert("An error had occured while punching out!");
+          // alert("An error had occured while punching out!");
+          let errorMessage = err.error;
+          Swal.fire({
+            title: 'Error',
+            text: errorMessage,            
+            icon:'error',
+          })
         }
       }
     });
@@ -219,13 +238,23 @@ export class DashboardComponent implements OnInit {
 
       // check for 12 hours
       if(hours>12 && hours<14 && !this.hasShown12HourWarning){
-        alert("Warning: You have punched in for more than 12 hours!")
+        // alert("Warning: You have punched in for more than 12 hours!")
+        Swal.fire({
+          title: 'Warning',
+          text: 'You have punched in for more than 12 hours!',            
+          icon:'warning',
+        })
         this.hasShown12HourWarning = true;
       }
       
       // check for 14 hours
       if(hours>=14 && !this.hasShown14HourWarning){
-        alert("Warning: You have punched in for more than 14 hours! Your time is invalid!")
+        // alert("Warning: You have punched in for more than 14 hours! Your time is invalid!")
+        Swal.fire({
+          title: 'Warning',
+          text: 'You have punched in for more than 14 hours! Your time is invalid!',            
+          icon:'warning',
+        })
         this.hasShown12HourWarning = false;
         this.hasShown14HourWarning = true;
       }
@@ -237,8 +266,90 @@ export class DashboardComponent implements OnInit {
     return n < 10 ? '0' + n : n.toString();
   }
 
+  exportData() {
+    // console.log('Punches:', this.punches);  
+    Swal.fire({
+      title: 'Export as?',
+      text: 'Choose your export format',
+      showDenyButton: true,
+      confirmButtonText: 'PDF',
+      denyButtonText: `Excel`,
+      icon:'success',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.exportAsPDF();
+      } else if (result.isDenied) {
+        this.exportAsExcel();
+      }
+    });
+  }
+  
+  exportAsPDF() {
+    const doc = new jsPDF();
+    // 10,10 is point in the graph like top left is 0,0 we are starting from 10,10
+    doc.text(`Punch History date: ${this.formatDate(this.selectedDate)}`, 10, 10);
+  
+    const tableData = this.punches.map(p => [
+      this.formatTime(new Date(p.punchIn)),
+      p.punchOut ? this.formatTime(new Date(p.punchOut)) : '-'
+    ]);
+  
+    autoTable(doc, {
+      head: [['Punch In', 'Punch Out']],
+      body: tableData,
+      startY: 20,
+      // styling below ---
+      styles: { font: 'helvetica', fontSize: 10, cellPadding: 5 },
+      headStyles: { fillColor: [22, 160, 133], textColor: [255, 255, 255] }, // Style for header
+      alternateRowStyles: { fillColor: [240, 240, 240] }, // Alternate row color
+    });
+
+     // === Preview in new tab ===
+    const pdfBlob = doc.output('blob'); // Get blob version
+    const blobUrl = URL.createObjectURL(pdfBlob); // Create object URL
+    window.open(blobUrl); // Open in new tab
+    
+    // and then save ---
+    doc.save(`Punch_History_${this.formatDate(this.selectedDate)}.pdf`);
+  }
+  
+  exportAsExcel() {
+    const worksheetData = this.punches.map(p => ({
+      'Punch In': this.formatTime(new Date(p.punchIn)),
+      'Punch Out': p.punchOut ? this.formatTime(new Date(p.punchOut)) : '-'
+    }));
+    
+     // Create a worksheet from the data
+    const ws = XLSX.utils.json_to_sheet(worksheetData);
+    
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Punch History');
+  
+    XLSX.writeFile(wb, `Punch_History_${this.formatDate(this.selectedDate)}.xlsx`);
+  }
+  
+
+
   logout(){
-    localStorage.removeItem('token');
-    this.router.navigate(['/login']);
+    Swal.fire({
+      title: 'Are You Sure',
+      text: 'Do you really want to logout!',
+      showDenyButton: true,
+      confirmButtonText: 'Logout',
+      denyButtonText: `Cancel`,
+      icon:'warning',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Success',
+          text: 'Logged out successfully!',                              
+          icon:'success',
+        }).then(()=>{
+          // remove the token and redirected to login
+          localStorage.removeItem('token');      
+          this.router.navigate(['/login']);
+        })
+      } 
+    });
   }
 }

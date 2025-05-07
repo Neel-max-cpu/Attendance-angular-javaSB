@@ -66,7 +66,17 @@
       dateFormat="yy-mm-dd"
       formControlName="date"
     />
+  <!-- export the punched -->
+    <button [disabled]="noData" (click)="exportData()" class="text-white disabled:hover:cursor-not-allowed disabled:bg-gray-400 font-mono p-2 bg-green-500 rounded-lg flex space-x-2 font-semibold hover:cursor-pointer hover:bg-green-600">
+      <span>
+        Export
+      </span>
+      <lucide-angular [img]="LogOut" class="my-icon rotate-135"></lucide-angular>
+    </button>
   </div>
+
+
+
 
   <!-- punched -->
   <div class="p-20 flex flex-col space-y-4 text-white">

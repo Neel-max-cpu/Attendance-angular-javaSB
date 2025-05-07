@@ -20,13 +20,17 @@
     "@angular/router": "^19.2.0",
     "@primeng/themes": "^19.1.0",
     "@tailwindcss/postcss": "^4.1.4",
+    "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
     "lucide-angular": "^0.503.0",
     "postcss": "^8.5.3",
     "primeicons": "^7.0.0",
     "primeng": "^19.1.0",
     "rxjs": "~7.8.0",
+    "sweetalert2": "^11.21.0",
     "tailwindcss": "^4.1.4",
     "tslib": "^2.3.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {

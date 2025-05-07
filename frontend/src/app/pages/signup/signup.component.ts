@@ -15,6 +15,9 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { IftaLabelModule } from 'primeng/iftalabel';
 
+// alert --
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-signup',
   imports: [
@@ -50,16 +53,32 @@ export class SignupComponent {
   }
 
   onSubmit() {
-    if(this.signUpForm.valid) {
+    if (this.signUpForm.valid) {
       this.authService.signUp(this.signUpForm.value).subscribe({
         next: (res) => {
           console.log('Signup Successful', res);
-          alert("Signup Successful!");
+          // alert("Signup Successful!");
           // redirect to /login
-          this.router.navigate(['/login']);
+          Swal.fire({
+            title: 'Success',
+            text: 'Account Created successfully!',
+            icon: 'success',
+          }).then(() => {
+            this.router.navigate(['/login']);
+          });
         },
         error: (err) => {
           console.log('Signup Failed', err);
+          let errorMessage =
+            'An error has occurred while trying to signup. Please try again.';
+          if (err.error) {
+            errorMessage = err.error;
+          }
+          Swal.fire({
+            title: 'Error',
+            text: errorMessage,
+            icon: 'error',
+          });
         },
       });
     }
