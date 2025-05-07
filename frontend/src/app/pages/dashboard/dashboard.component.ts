@@ -199,9 +199,14 @@ export class DashboardComponent implements OnInit {
   }
 
   formatTime(date: Date): string {
+    // 24hr format
+    /*
     const hours = date.getHours().toString().padStart(2, '0');
     const mins = date.getMinutes().toString().padStart(2, '0');
     return `${hours}:${mins}`;
+    */
+    // 12hr am/pm format
+    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
   }
 
   getFormattedTotalTime(): string {
@@ -288,6 +293,10 @@ export class DashboardComponent implements OnInit {
     const doc = new jsPDF();
     // 10,10 is point in the graph like top left is 0,0 we are starting from 10,10
     doc.text(`Punch History date: ${this.formatDate(this.selectedDate)}`, 10, 10);
+    let hours = Math.floor(this.todayTotalTime/60);
+    let mins = this.todayTotalTime%60;
+    doc.text(`Total Time Given: ${hours ? `${hours} hr ${mins} mins` : `${mins} mins`}`, 10, 20);
+
   
     const tableData = this.punches.map(p => [
       this.formatTime(new Date(p.punchIn)),
@@ -297,7 +306,7 @@ export class DashboardComponent implements OnInit {
     autoTable(doc, {
       head: [['Punch In', 'Punch Out']],
       body: tableData,
-      startY: 20,
+      startY: 30,
       // styling below ---
       styles: { font: 'helvetica', fontSize: 10, cellPadding: 5 },
       headStyles: { fillColor: [22, 160, 133], textColor: [255, 255, 255] }, // Style for header
