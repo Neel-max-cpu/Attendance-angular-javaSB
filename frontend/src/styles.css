@@ -16,13 +16,13 @@
 }
 
 .temp-class .p-datepicker-panel{
-    @apply border-none text-gray-400
+    @apply border-none text-gray-400;
 }
 
 .temp-class {
     .p-datepicker-panel,
     .p-datepicker-header{
-        @apply bg-black text-white
+        @apply bg-black text-white;
     }
 
 }
@@ -30,13 +30,17 @@
 .temp-class{
     .p-datepicker-select-month,
     .p-datepicker-select-year{
-        @apply text-white
+        @apply text-white;
     }
 }
 
 .temp-class {
     .p-datepicker-day,
     .p-datepicker-weekday{
-        @apply text-white
+        @apply text-white;
     }
+}
+
+.temp-class .p-datepicker-day-selected{
+    @apply bg-yellow-500 text-white;
 }

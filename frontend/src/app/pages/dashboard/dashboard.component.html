@@ -1,4 +1,4 @@
-<div class=" min-h-screen w-full bg-[#181515] font-mono">
+<div class="min-h-screen w-full bg-[#181515] font-mono">
   <div class="flex justify-end p-4">
     <!-- signout -->
     <button
@@ -11,13 +11,31 @@
   </div>
 
   <!-- punch in/out -->
-  <div *ngIf="hasShown12HourWarning" class="flex items-center justify-center space-x-2">  
-    <lucide-angular [img]="OctagonAlert" class="my-icon text-yellow-500"></lucide-angular>
-    <h1 class="text-white">More than <span class="text-red-500">12hours</span> have passed! <span class="text-yellow-500">Punch Out!</span></h1>
+  <div
+    *ngIf="hasShown12HourWarning"
+    class="flex items-center justify-center space-x-2"
+  >
+    <lucide-angular
+      [img]="OctagonAlert"
+      class="my-icon text-yellow-500"
+    ></lucide-angular>
+    <h1 class="text-white">
+      More than <span class="text-red-500">12hours</span> have passed!
+      <span class="text-yellow-500">Punch Out!</span>
+    </h1>
   </div>
-  <div *ngIf="hasShown14HourWarning" class="flex items-center justify-center space-x-2">  
-    <lucide-angular [img]="OctagonAlert" class="my-icon text-yellow-500"></lucide-angular>
-    <h1 class="text-white">More than <span class="text-red-500">14hours</span> have passed! <span class="text-yellow-500">Your time is invalid!</span></h1>
+  <div
+    *ngIf="hasShown14HourWarning"
+    class="flex items-center justify-center space-x-2"
+  >
+    <lucide-angular
+      [img]="OctagonAlert"
+      class="my-icon text-yellow-500"
+    ></lucide-angular>
+    <h1 class="text-white">
+      More than <span class="text-red-500">14hours</span> have passed!
+      <span class="text-yellow-500">Your time is invalid!</span>
+    </h1>
   </div>
   <div *ngIf="todaydate" class="flex flex-col">
     <div class="flex justify-center items-center space-x-4 p-15">
@@ -39,7 +57,7 @@
       </button>
     </div>
     <div class="text-white text-center mb-10 text-2xl font-mono">
-        {{elapsedTime || "00:00:00"}}
+      {{ elapsedTime || "00:00:00" }}
     </div>
   </div>
 
@@ -58,25 +76,38 @@
     >
       Today
     </button>
-    <p-datepicker
-      [showIcon]="true"
-      (onSelect)="onDateChange($event)"
-      class="temp-class"
-      placeholder="Select date"
-      dateFormat="yy-mm-dd"
-      formControlName="date"
-    />
-  <!-- export the punched -->
-    <button [disabled]="noData" (click)="exportData()" class="text-white disabled:hover:cursor-not-allowed disabled:bg-gray-400 font-mono p-2 bg-green-500 rounded-lg flex space-x-2 font-semibold hover:cursor-pointer hover:bg-green-600">
-      <span>
-        Export
-      </span>
-      <lucide-angular [img]="LogOut" class="my-icon rotate-135"></lucide-angular>
+    <!-- export the punched -->
+    <button
+      [disabled]="noData"
+      (click)="exportData()"
+      class="text-white disabled:hover:cursor-not-allowed disabled:bg-gray-400 font-mono p-2 bg-green-500 rounded-lg flex space-x-2 font-semibold hover:cursor-pointer hover:bg-green-600"
+    >
+      <span> Export </span>
+      <lucide-angular
+        [img]="LogOut"
+        class="my-icon rotate-135"
+      ></lucide-angular>
     </button>
   </div>
 
+  <div class="flex items-center justify-center mt-5">
 
-
+      <p-selectbutton [options]="stateOptions" [(ngModel)]="value" optionLabel="label" optionValue="value" aria-labelledby="basic" />
+  
+    <div class="flex space-x-2 items-center">
+      <span class="text-white">Select a Date:</span>
+      <p-datepicker
+        [showIcon]="true"
+        (onSelect)="onDateChange($event)"
+        class="temp-class"
+        placeholder="Select date"
+        dateFormat="yy-mm-dd"
+        formControlName="date"
+        [iconDisplay]="'input'"
+        inputId="icondisplay"
+      />
+    </div>
+  </div>
 
   <!-- punched -->
   <div class="p-20 flex flex-col space-y-4 text-white">

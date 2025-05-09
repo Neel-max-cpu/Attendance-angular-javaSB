@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PunchService } from '../../services/punch.service';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
+import { FormsModule, NgModel } from '@angular/forms';
 
 // for exporting --
 import * as XLSX from 'xlsx';
@@ -14,6 +15,7 @@ import { LucideAngularModule, TicketCheck, TicketMinus,LogOut,OctagonAlert,Downl
 
 // components -
 import { DatePicker  } from 'primeng/datepicker';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 
 // custom alert --
@@ -21,7 +23,15 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [LucideAngularModule, NgIf, NgFor, DatePicker, DatePipe],
+  imports: [
+    FormsModule,    
+    LucideAngularModule, 
+    NgIf, 
+    NgFor, 
+    DatePicker, 
+    DatePipe,
+    SelectButtonModule
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -32,6 +42,10 @@ export class DashboardComponent implements OnInit {
   readonly OctagonAlert  = OctagonAlert;
   readonly Download = Download;
 
+
+  // for toggle button --
+  stateOptions: any[] = [{ label: 'One-Way', value: 'one-way' },{ label: 'Return', value: 'return' }];
+  value: string = 'off';
 
   isPunchedIn = false;
   todaydate = true;
