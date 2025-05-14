@@ -25,7 +25,7 @@ public class PunchService {
             throw new RuntimeException("Already punched in. Punch out first!");
         }
 
-        PunchRecordEntity record = new PunchRecordEntity(userId, LocalDate.now(), LocalDateTime.now());
+        PunchRecordEntity record = new PunchRecordEntity(userId, LocalDate.now(), LocalDateTime.now(), true);
         return punchRepo.save(record);
     }
 
@@ -39,22 +39,18 @@ public class PunchService {
         Duration duration = Duration.between(punchIn, punchOut);
         if(duration.toHours() > 14){
             record.setPunchOut(null);
+            record.setLoggedIn(false);
             throw new RuntimeException("Punch out rejected: more than 14 hours have passed!");
         }
 
         record.setPunchOut(punchOut);
+        record.setLoggedIn(false);
         return punchRepo.save(record);
     }
 
     // Get punch history with calculated total time
     public List<PunchRecordEntity> getPunchHistory(Long userId) {
         List<PunchRecordEntity> records = punchRepo.findByUserIdOrderByDateDesc(userId);
-        for (PunchRecordEntity record : records) {
-            if (record.getPunchIn() != null && record.getPunchOut() != null) {
-                long totalMinutes = Duration.between(record.getPunchIn(), record.getPunchOut()).toMinutes();
-                record.setTotalTime(totalMinutes);  // Setting calculated total time
-            }
-        }
         return records;
     }
 

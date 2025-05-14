@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, isSignal, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PunchService } from '../../services/punch.service';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
+
 
 // for exporting --
 import * as XLSX from 'xlsx';
@@ -21,7 +22,14 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [LucideAngularModule, NgIf, NgFor, DatePicker, DatePipe],
+  imports: [    
+    LucideAngularModule,
+    NgIf,
+    NgFor,
+    DatePicker,
+    DatePipe,    
+  ],
+  standalone: true,
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -31,7 +39,7 @@ export class DashboardComponent implements OnInit {
   readonly LogOut = LogOut ;
   readonly OctagonAlert  = OctagonAlert;
   readonly Download = Download;
-
+  
 
   isPunchedIn = false;
   todaydate = true;
@@ -50,7 +58,10 @@ export class DashboardComponent implements OnInit {
   noData : boolean = false;  
 
 
-  constructor(private router: Router, private punchService: PunchService){}
+  constructor(
+    private router: Router, 
+    private punchService: PunchService,     
+  ){}
 
   ngOnInit() {
     this.selectedDate = new Date();
@@ -319,7 +330,7 @@ export class DashboardComponent implements OnInit {
     window.open(blobUrl); // Open in new tab
     
     // and then save ---
-    doc.save(`Punch_History_${this.formatDate(this.selectedDate)}.pdf`);
+    // doc.save(`Punch_History_${this.formatDate(this.selectedDate)}.pdf`);
   }
   
   exportAsExcel() {

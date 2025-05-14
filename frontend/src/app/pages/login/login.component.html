@@ -43,19 +43,18 @@
             label="Login"
             type="submit"
             class="w-full"
-            styleClass="w-full"
-            variant="text"
+            styleClass="w-full !font-mono !text-white !bg-green-800 !border-none hover:!bg-green-900 "            
             [raised]="true"
-            severity="help"
+            severity="success"
           />
           <div class="flex flex-col items-center">
             <h1 class="font-mono">
               Don't have an account
-              <a class="text-blue-700 underline" routerLink="/signup"
+              <a class="text-blue-500 underline" routerLink="/signup"
                 >create one here!</a
               >
             </h1>
-            <a class="text-blue-700 underline font-mono" routerLink="/forgot"
+            <a class="text-blue-500 underline font-mono" routerLink="/forgot"
               >Forgot your password</a
             >
           </div>

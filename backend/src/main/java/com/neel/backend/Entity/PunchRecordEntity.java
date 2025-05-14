@@ -18,27 +18,25 @@ public class PunchRecordEntity {
     private LocalDate date;
     private LocalDateTime punchIn;
     private LocalDateTime punchOut;
-
-    private Long totalTime;
-
-    public Long getTotalTime() {
-        if (punchIn != null && punchOut != null) {
-            totalTime = Duration.between(punchIn, punchOut).toMinutes();
-        }
-        return totalTime;
-    }
-
-    public void setTotalTime(Long totalTime) {
-        this.totalTime = totalTime;
-    }
+    private boolean isLoggedIn = false;
 
     public PunchRecordEntity(){}
 
-    public PunchRecordEntity(Long userId, LocalDate date, LocalDateTime punchIn){
+    public PunchRecordEntity(Long userId, LocalDate date, LocalDateTime punchIn, boolean isLoggedIn){
         this.userId = userId;
         this.date = date;
         this.punchIn = punchIn;
+        this.isLoggedIn = isLoggedIn;
     }
+
+    public boolean isLoggedIn() {
+        return isLoggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        isLoggedIn = loggedIn;
+    }
+
 
     public Long getId() {
         return id;
