@@ -40,3 +40,7 @@
         @apply text-white
     }
 }
+
+.temp-class .p-datepicker-day-selected {
+    @apply bg-yellow-500 text-white
+}
